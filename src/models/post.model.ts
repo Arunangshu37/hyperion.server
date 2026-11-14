@@ -15,6 +15,10 @@ const postSchema = new mongoose.Schema({
         data: {
             type: String,
             required: true
+        },
+        order: {
+            type: Number,
+            required: true
         }
     }],
     userId: {

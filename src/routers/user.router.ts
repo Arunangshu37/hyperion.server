@@ -3,7 +3,6 @@ import express, { type Request, type Response } from "express";
 import { User } from "../models/user.model.ts";
 
 const userRouter = express.Router();
-
 userRouter.post('/register', async (request: Request, response: Response) => {
     try {
         const { email, name, hashedPassword } = request.body;

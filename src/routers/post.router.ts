@@ -44,7 +44,6 @@ postRouter.put('/update', async (request: Request, response: Response) => {
 
 postRouter.delete('/delete/:id', async (request: Request, response: Response) => {
     try {
-        // const { title, content, userId, id } = request.body;
         const { id } = request.params;
         if (!id) {
             return response.status(400).json({
@@ -67,7 +66,7 @@ postRouter.delete('/delete/:id', async (request: Request, response: Response) =>
     }
 });
 
-postRouter.get('/get-all/:userId', async (request: Request, response: Response) => {
+postRouter.get('/get-all-post-title/:userId', async (request: Request, response: Response) => {
     try {
         const userId = request.params.userId as string | '';
         if (!userId) {
@@ -76,7 +75,32 @@ postRouter.get('/get-all/:userId', async (request: Request, response: Response) 
                 status: 'error'
             });
         }
-        const result = await Post.find({ userId: new mongoose.Types.ObjectId(userId) });
+
+        const result = await Post.find({ userId: new mongoose.Types.ObjectId(userId) }).select({title: 1, _id: 1});
+
+        return response.status(200).json({
+            status: 'success',
+            result
+        });
+
+    } catch (err) {
+        return response.status(500).json({
+            message: `Internal server error ${err}`,
+            status: 'error'
+        });
+    }
+});
+
+postRouter.get('/get-post-by-id/:id', async (request: Request, response: Response) => {
+    try {
+        const postId = request.params.id as string | '';
+        if (!postId) {
+            return response.status(400).json({
+                message: 'Bad data',
+                status: 'error'
+            });
+        }
+        const result = await Post.find({ _id: new mongoose.Types.ObjectId(postId) });
 
         return response.status(200).json({
             status: 'success',
